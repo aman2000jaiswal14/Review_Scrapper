@@ -1,0 +1,54 @@
+body {
+  width: 100vw;
+  padding: 0;
+  margin: 0;
+  background: white;
+  animation-name: example;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+}
+.a h1 {
+  text-align: center;
+  color: red;
+  margin-top: 40vh;
+  margin-left: 40%;
+  margin-right: 40%;
+  width: 20%;
+  height: 20%;
+  font-size: 5rem;
+}
+.a h2 {
+  font-size: 2rem;
+  position: relative;
+  animation-name: example2;
+  animation-duration: 30s;
+  animation-iteration-count: infinite;
+}
+@keyframes example {
+  0% {
+    background-color: white;
+  }
+  25% {
+    background-color: yellow;
+  }
+  50% {
+    background-color: blue;
+  }
+  100% {
+    background-color: green;
+  }
+}
+@keyframes example2 {
+  0% {
+    left: 0px;
+  }
+  25% {
+    left: 100vw;
+  }
+  50% {
+    left: 0px;
+  }
+  100% {
+    left: 100vw;
+  }
+}

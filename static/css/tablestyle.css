@@ -1,0 +1,10 @@
+.tab {
+  position: absolute;
+  top: 10%;
+  width: 80%;
+  justify-content: center safe;
+  align-items: center;
+  margin-left: 10%;
+  margin-right: 10%;
+}
+

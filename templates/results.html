@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+      integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="static/css/tablestyle.css" />
+  </head>
+  <body>
+  <h2 class="text-center text-warning">{{title1}}</h2>
+
+    <table class="table table-striped table-dark tab">
+
+      <thead>
+       <caption>{{title1}}</caption>
+        <tr>
+          <th scope="col">Sno</th>
+          <th scope="col">Name</th>
+          <th scope="col">Rating</th>
+          <th scope="col">Date</th>
+          <th scope="col">Time</th>
+          <th scope="col">Reviews</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {%for rev in all_review%}
+        <tr>
+          <th scope="row">{{rev["Sno"]}}</th>
+          <td>{{rev["name"]}}</td>
+          <td>{{rev["rating"]}}</td>
+          <td>{{rev["date"]}}</td>
+          <td>{{rev["time"]}}</td>
+          <td>{{rev["comment"]}}</td>
+        </tr>
+        {%endfor%}
+      </tbody>
+    </table>
+  </body>
+</html>
