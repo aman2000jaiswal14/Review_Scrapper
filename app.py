@@ -18,7 +18,7 @@ def homepage():
 def index():
     if(request.method=="POST"):
         try:
-            searchString = request.form['content'].replace(" ","")
+            searchString = request.form['content'].replace(" ","-")
             searchString = searchString.replace("(","")
             searchString = searchString.replace(")", "")
 
@@ -26,59 +26,83 @@ def index():
             uClient = urlopen(flipkart_url)
             flipkart_page = uClient.read()
             uClient.close()
-
+            print(flipkart_url)
             flipkart_html = bs(flipkart_page,'html.parser')
-
-            bigbox = flipkart_html.findAll('div', {"class":"_2pi5LC col-12-12"})
-
-            del bigbox[0:2]
-            box = bigbox[0]
-
-            productLink = "https://www.flipkart.com" + box.div.div.div.a['href']
-
-
-            prodRes = requests.get(productLink)
-            prodHtml = bs(prodRes.text,'html.parser')
-
-            review_box = prodHtml.findAll('div',{'class':"col _2wzgFH"})
-
-            # print(len(review_box))
-
-            all_review = []
-            count = 1
-            for rev in review_box:
-                final = {}
+            for iter in range(10):
                 try:
-                    final["time"] = rev.find_all('div',{"class":"row _3n8db9"})[0].div.find_all('p',{"class":"_2sc7ZR"})[1].text
-                    final["Sno"] = count
-                    count += 1
-                except:
-                    final["time"]  = "Not known"
-                try:
-                    final["name"]  = rev.find_all('div',{"class":"row _3n8db9"})[0].div.p.text
-                except:
-                    final["name"] = "No name"
-                try:
-                    final["rating"] = rev.div.div.text
+                    bigbox1 = flipkart_html.findAll('a', {"class":"_2rpwqI"})
+                    if(len(bigbox1)!=0):
+                        box = bigbox1[iter]
+                        productLink = "https://www.flipkart.com" + box['href']
+                        print(productLink)
+                    else:
+                        bigbox2 = flipkart_html.findAll('a', {"class": "_2UzuFa"})
+                        if(len(bigbox2)!=0):
+                            box = bigbox2[iter]
+                            productLink = "https://www.flipkart.com" + box['href']
+                            print(productLink)
+                        else:
+                            bigbox3 = flipkart_html.findAll('a', {"class": "_1fQZEK"})
+                            box = bigbox3[iter]
+                            productLink = "https://www.flipkart.com" + box['href']
+                            print(productLink)
+                except Exception as e:
+                    print(e)
 
-                except:
-                    final["rating"] = "No rating"
+                prodRes = requests.get(productLink)
+                prodHtml = bs(prodRes.text,'html.parser')
                 try:
-                    final["commentHead"] = rev.div.p.text
+                    prodname = prodHtml.findAll('span',{'class':"G6XhRU"})[0].text
                 except:
-                    final["commentHead"] = "No heading"
+                    try:
+                        prodname = prodHtml.findAll('span', {'class': "B_NuCI"})[0].text
+                    except:
+                        prodname=''
+                review_box = prodHtml.findAll('div',{'class':"col _2wzgFH"})
+                if(len(review_box)==0):
+                    review_box = prodHtml.findAll('div', {'class': "col _2wzgFH _1QgsS5"})
+                # print(len(review_box))
 
-                try:
-                    final["comment"] = rev.find_all('div',{"class":"row"})[1].div.div.div.text
-                except:
-                    final["comment"] = "No comment"
-                all_review.append(final)
+                all_review = []
+                count = 1
+                for rev in review_box:
+                    final = {}
+                    try:
+                        final["time"] = rev.find_all('div',{"class":"row _3n8db9"})[0].div.find_all('p',{"class":"_2sc7ZR"})[1].text
+                        final["Sno"] = count
+                        count += 1
+                    except:
+                        final["time"]  = "Not known"
 
-            if(len(all_review)==0):
-                return render_template('error.html')
-            return render_template('results.html', all_review = all_review,title1 = searchString)
+                    try:
+                        final["name"]  = rev.find_all('div',{"class":"row _3n8db9"})[0].div.p.text
+                    except:
+                        final["name"] = "No name"
+                    try:
+                        final["rating"] = rev.div.div.text
 
-        except:
+                    except:
+                        final["rating"] = "No rating"
+                    try:
+                        final["commentHead"] = rev.div.p.text
+                    except:
+                        final["commentHead"] = "No heading"
+
+                    try:
+                        final["comment"] = rev.find_all('div',{"class":"row"})[1].div.div.div.text
+                    except:
+                        final["comment"] = "No comment"
+                    all_review.append(final)
+                if(len(all_review)!=0):
+                    break
+            if(len(all_review)!=0):
+                empty = 0
+            else:
+                empty=1
+            return render_template('results.html', all_review = all_review,title1 = searchString,prodname =prodname ,empty = empty)
+
+        except Exception as e:
+            print(e)
             pass
     return render_template('error.html')
 
