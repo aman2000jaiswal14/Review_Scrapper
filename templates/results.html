@@ -12,13 +12,18 @@
     />
     <link rel="stylesheet" href="static/css/tablestyle.css" />
   </head>
-  <body>
-  <h2 class="text-center text-warning">{{title1}}</h2>
+  <body style ="background-image: url('static/img/img2.jpeg'); background-size: 700px 600px;">
+  <h2 class="text-center text-dark"><strong>{{title1}}</strong></h2>
+  {% if empty %}
+  <h2 class="text-center text-danger">No reviews available</h2>
+  {% else %}
+  <h3 class="text-center text-light">{{prodname}}</h3>
 
-    <table class="table table-striped table-dark tab">
+    <table class="table table-striped table-dark tab" style="margin-top: 8px;">
 
       <thead>
-       <caption>{{title1}}</caption>
+       <caption color="red">{{title1}} </caption>
+       <caption>{{prodname}}</caption>
         <tr>
           <th scope="col">Sno</th>
           <th scope="col">Name</th>
@@ -42,5 +47,6 @@
         {%endfor%}
       </tbody>
     </table>
+  {% endif %}
   </body>
 </html>
